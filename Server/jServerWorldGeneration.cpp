@@ -1,6 +1,7 @@
-#include "jVariables.h"
-#include "jGenerateWorld.h"
+#include "jServerVariables.h"
+#include "jServerWorldGeneration.h"
 
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -27,7 +28,7 @@ namespace jgw {
                     if (numIslands < targetIslands && genIsland < targetIslands) {
                         for (int k = i; k < i + chunkSize/2 && k < WORLD_HEIGHT; k++) {
                             for (int l = j; l < j + chunkSize && l < WORLD_WIDTH; l++) {
-                                jWorldA[k * WORLD_WIDTH + l] = 4;
+                                world[k * WORLD_WIDTH + l] = 4;
                             }
                         }
                         numIslands++;
@@ -41,7 +42,7 @@ namespace jgw {
                 for (int j = 0; j < WORLD_WIDTH; j += chunkSize) {
                     for (int k = i; k < i + chunkSize && k < WORLD_HEIGHT; k++) {
                         for (int l = j; l < j + chunkSize && l < WORLD_WIDTH; l++) {
-                            jWorldA[k * WORLD_WIDTH + l] = 1;
+                            world[k * WORLD_WIDTH + l] = 1;
                         }
                     }
                 }

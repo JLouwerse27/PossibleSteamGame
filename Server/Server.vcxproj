@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1d20bcf2-eb96-4a71-9d0d-386f78492a94}</ProjectGuid>
-    <RootNamespace>SteamGameScuffed</RootNamespace>
+    <ProjectGuid>{bbe96161-aaea-45aa-9d99-da2e1e9e9d3f}</ProjectGuid>
+    <RootNamespace>Server</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,11 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="lessScuffed.txt" />
+    <ClCompile Include="jFileManager.cpp" />
+    <ClCompile Include="jServerVariables.cpp" />
+    <ClCompile Include="jServerWorldGeneration.cpp" />
+    <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Game Ideas.txt" />
-    <Text Include="scuffed.txt" />
+    <ClInclude Include="jFileManager.h" />
+    <ClInclude Include="jServerVariables.h" />
+    <ClInclude Include="jServerWorldGeneration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

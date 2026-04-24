@@ -2,16 +2,19 @@
 
 #include <atomic>
 #include <cstdint>
-#include <iostream>
 
 extern bool jEditing;
 extern std::atomic<bool> jRunning;
+
+extern int jDirtLevel;
+
 extern int jBlockSize;
 extern int jXBlocksInCameraView;
 extern int jYBlocksInCameraView;
 
 extern std::atomic<uint32_t> jX;
 extern std::atomic<uint32_t> jY;
+
 extern bool jIsKeyPressed[32];
 
 const int WINDOW_WIDTH = 800;
@@ -23,8 +26,6 @@ const int WORLD_SIZE = WORLD_WIDTH * WORLD_HEIGHT;
 
 extern unsigned char jWorldA[WORLD_SIZE];
 extern unsigned char jWorldB[WORLD_SIZE];
-
-extern int jDirtLevel;
 
 extern std::atomic<unsigned char*> jRenderWorld;
 extern unsigned char* jLogicWorld;

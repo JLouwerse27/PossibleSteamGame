@@ -18,11 +18,32 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="jClientLogic.cpp" />
+    <ClCompile Include="jClientWorldGeneration.cpp" />
+    <ClCompile Include="jGraphics.cpp" />
+    <ClCompile Include="jInputHandler.cpp" />
+    <ClCompile Include="jNetworkClient.cpp" />
+    <ClCompile Include="jPlayer.cpp" />
+    <ClCompile Include="jVariables.cpp" />
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="jClientLogic.h" />
+    <ClInclude Include="jClientWorldGeneration.h" />
+    <ClInclude Include="jGraphics.h" />
+    <ClInclude Include="jInputHandler.h" />
+    <ClInclude Include="jNetworkClient.h" />
+    <ClInclude Include="jPlayer.h" />
+    <ClInclude Include="jVariables.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1d20bcf2-eb96-4a71-9d0d-386f78492a94}</ProjectGuid>
-    <RootNamespace>SteamGameScuffed</RootNamespace>
+    <ProjectGuid>{c565a8d7-41dd-44e7-888b-0a5a939dbaaf}</ProjectGuid>
+    <RootNamespace>Client</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -126,13 +147,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="lessScuffed.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Game Ideas.txt" />
-    <Text Include="scuffed.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

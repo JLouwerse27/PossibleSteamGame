@@ -23,4 +23,3 @@ std::atomic<unsigned char*> jRenderWorld = nullptr;
 unsigned char* jLogicWorld = nullptr;
 
 bool jNextTurn = false;
-

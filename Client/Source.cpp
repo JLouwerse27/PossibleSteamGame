@@ -5,12 +5,13 @@
 
 #include "GameObject.h"
 #include "jGraphics.h"
-#include "jFileManager.h"
 #include "jInputHandler.h"
 #include "jVariables.h"
-#include "jGameLogic.h"
-#include "jGenerateWorld.h"
+#include "jClientLogic.h"
+#include "jClientWorldGeneration.h"
 #include "jPlayer.h"
+#include "jNetworkClient.h"
+
 
 int main() {
     GameObject go;
@@ -19,14 +20,18 @@ int main() {
     jLogicWorld = jWorldA;
     jRenderWorld.store(jWorldB);
 
-    jgw::jGenerateWorld();
+    JNetworkClient net;
+    net.connectToServer("127.0.0.1", 5000);
 
-    std::memcpy(jWorldB, jWorldA, WORLD_SIZE);
+    //if (!net.isConnected()) {
+    //    jgw::jGenerateWorld();
+    //    std::memcpy(jWorldB, jWorldA, WORLD_SIZE);
+    //}
 
     JPlayer * jpl = new JPlayer;
 
     JGraphics jg(WINDOW_WIDTH, WINDOW_HEIGHT, jpl);
-    jg.init("simple terraria");
+    jg.init("simple terraria: multiplayer client");
 
     JInputHandler ji;
     JGameLogic jgl;
@@ -35,6 +40,7 @@ int main() {
 
     while (jg.isOpen()) {
         ji.runInput();
+        net.receiveUpdates();
         jg.doGraphics();
     }
 
@@ -43,3 +49,17 @@ int main() {
 
     return 0;
 }
+
+
+//    JInputHandler ji;
+//
+//    while (jg.isOpen()) {
+//        ji.runInput();
+//        jgl::updateGameLogic();
+//        
+//        jg.doGraphics();
+//    }
+//
+//    jRunning = false;
+//    return 0;
+//}
