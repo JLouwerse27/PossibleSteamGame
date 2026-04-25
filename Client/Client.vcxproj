@@ -19,24 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="jClientLogic.cpp" />
     <ClCompile Include="jClientWorldGeneration.cpp" />
     <ClCompile Include="jGraphics.cpp" />
     <ClCompile Include="jInputHandler.cpp" />
     <ClCompile Include="jNetworkClient.cpp" />
-    <ClCompile Include="jPlayer.cpp" />
+    <ClCompile Include="jRemotePlayers.cpp" />
     <ClCompile Include="jVariables.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="jClientLogic.h" />
     <ClInclude Include="jClientWorldGeneration.h" />
     <ClInclude Include="jGraphics.h" />
     <ClInclude Include="jInputHandler.h" />
     <ClInclude Include="jNetworkClient.h" />
     <ClInclude Include="jPlayer.h" />
+    <ClInclude Include="jRemotePlayer.h" />
+    <ClInclude Include="jRemotePlayers.h" />
     <ClInclude Include="jVariables.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

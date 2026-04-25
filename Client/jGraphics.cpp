@@ -1,5 +1,6 @@
 #include "jGraphics.h"
-
+#include "jRemotePlayers.h"
+#include <iostream>
 #include <string>
 #include <optional>
 
@@ -61,11 +62,33 @@ void JGraphics::doGraphics() {
     }
 
     jRect.setFillColor(sf::Color(180, 90, 50));
-    jRect.setPosition(sf::Vector2f( ((jpl->getX())-jX)*jBlockSize, ((jpl->getY())-jY)*jBlockSize));
+    jRect.setPosition(sf::Vector2f(((jpl->x)-jX)*jBlockSize, ((jpl->y)-jY)*jBlockSize));
+    float rx = jRect.getPosition().x;
+    float ry = jRect.getPosition().y;
+    if (rx < 0 || rx >(jXBlocksInCameraView)*jBlockSize ||
+        ry < 0 || ry >(jYBlocksInCameraView) * jBlockSize) {
+        std::cout << "player rectangle out of screen " << rx << " " << ry << "\n";
+    }
     rw.draw(jRect);
+
+    drawOtherPlayers(camX, camY);
 
     rw.display();
 }
+
+void JGraphics::drawOtherPlayers(uint32_t camX, uint32_t camY) {
+    for (const RemotePlayer& p : remotePlayers) {
+        // draw 
+        if (p.x >= camX && p.x <= camX + jXBlocksInCameraView) {
+            if (p.y >= camY && p.y <= camY + jYBlocksInCameraView) {
+                jRect.setFillColor(sf::Color(180, 90, 50));
+                jRect.setPosition(sf::Vector2f(p.x * jBlockSize, p.y * jBlockSize));
+                rw.draw(jRect);
+            }
+        }
+    }
+}
+
 
 bool JGraphics::isOpen() const {
     return rw.isOpen();

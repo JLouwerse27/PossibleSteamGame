@@ -9,7 +9,7 @@ int jBlockSize = 20;
 int jXBlocksInCameraView = WINDOW_WIDTH / jBlockSize;
 int jYBlocksInCameraView = WINDOW_HEIGHT / jBlockSize;
 
-std::atomic<uint32_t> jX = WORLD_WIDTH/2;
+std::atomic<uint32_t> jX = WORLD_WIDTH/2 - jXBlocksInCameraView/2;
 std::atomic<uint32_t> jY = jDirtLevel - jYBlocksInCameraView/2;
 
 bool jIsKeyPressed[32] = {};

@@ -8,6 +8,7 @@ private:
 	sf::RenderWindow rw;
 	sf::RectangleShape jRect;
 	JPlayer* jpl;
+	void drawOtherPlayers(uint32_t camX, uint32_t camY);
 public:
 	const uint32_t WIDTH, HEIGHT;
 	JGraphics(uint32_t w, uint32_t h, JPlayer * jpl);

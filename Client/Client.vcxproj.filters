@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="jClientLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,20 +30,17 @@
     <ClCompile Include="jNetworkClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="jVariables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="jRemotePlayers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="jClientLogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -62,10 +56,16 @@
     <ClInclude Include="jNetworkClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jPlayer.h">
+    <ClInclude Include="jVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="jVariables.h">
+    <ClInclude Include="jRemotePlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jRemotePlayers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

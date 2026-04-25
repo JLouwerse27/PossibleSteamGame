@@ -2,6 +2,8 @@
 
 #include <atomic>
 #include <cstdint>
+#include <vector>
+#include <cstdint>
 
 extern bool jEditing;
 extern std::atomic<bool> jRunning;

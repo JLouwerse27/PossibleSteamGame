@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <cstdint>
 #include <ctime>
 #include "jServerVariables.h"
 #include "jServerWorldGeneration.h"
@@ -18,8 +19,18 @@ using Block = unsigned char;
 //
 //Block world[WORLD_SIZE] = {};
 
+struct Player {
+    int id;
+    uint32_t x;
+    uint32_t y;
+    uint32_t health;
+};
+
+int nextPlayerId = 1;
+
 struct Client {
     sf::TcpSocket* socket;
+    Player player;
 };
 
 std::vector<Client> clients;
@@ -34,6 +45,7 @@ void sendFullWorld(sf::TcpSocket& socket) {
     }
 
     socket.send(packet);
+    std::cout << "sent full world\n";
 }
 
 void sendBlockUpdate(sf::TcpSocket& socket, int x, int y, Block blockType) {
@@ -50,6 +62,35 @@ void sendBlockUpdate(sf::TcpSocket& socket, int x, int y, Block blockType) {
 void broadcastBlockUpdate(int x, int y, Block blockType) {
     for (Client& client : clients) {
         sendBlockUpdate(*client.socket, x, y, blockType);
+    }
+}
+
+void sendPlayerUpdate(sf::TcpSocket& socket, const Player& player) {
+    sf::Packet packet;
+
+    packet << std::string("PLAYER_UPDATE");
+    packet << player.id;
+    packet << static_cast<int>(player.x);
+    packet << static_cast<int>(player.y);
+    packet << static_cast<int>(player.health);
+
+    socket.send(packet);
+}
+
+void broadcastPlayerUpdate(const Player& player) {
+    for (Client& client : clients) {
+        sendPlayerUpdate(*client.socket, player);
+    }
+}
+
+void broadcastPlayerDisconnect(int id) {
+    sf::Packet packet;
+
+    packet << std::string("PLAYER_DISCONNECT");
+    packet << id;
+
+    for (Client& client : clients) {
+        client.socket->send(packet);
     }
 }
 
@@ -74,9 +115,27 @@ int main() {
         if (listener.accept(*newClient) == sf::Socket::Status::Done) {
             std::cout << "Client connected\n";
 
-            clients.push_back({ newClient });
+            Player p;
+            p.id = nextPlayerId++;
+            p.x = WORLD_WIDTH / 2;
+            p.y = 100;
+            p.health = 30;
+
+            sf::Packet packet;
+            packet << std::string("YOUR_ID");
+            packet << p.id;
+
+            newClient->send(packet);
+
+            clients.push_back({ newClient, p });
 
             sendFullWorld(*newClient);
+
+
+            for (const Client& client : clients) {
+                sendPlayerUpdate(*newClient, client.player);
+            }
+            broadcastPlayerUpdate(p);
         }
         else {
             delete newClient;
@@ -107,13 +166,32 @@ int main() {
                         broadcastBlockUpdate(x, y, blockType);
                     }
                 }
+                else if (command == "MOVE_PLAYER") {
+                    int x;
+                    int y;
+
+                    packet >> x >> y;
+
+                    if (x >= 0 && x < WORLD_WIDTH &&
+                        y >= 0 && y < WORLD_HEIGHT) {
+
+                        clients[i].player.x = static_cast<uint32_t>(x);
+                        clients[i].player.y = static_cast<uint32_t>(y);
+
+                        broadcastPlayerUpdate(clients[i].player);
+                    }
+                }
             }
             else if (status == sf::Socket::Status::Disconnected) {
                 std::cout << "Client disconnected\n";
 
+                int disconnectedId = clients[i].player.id;
+
                 delete clients[i].socket;
                 clients.erase(clients.begin() + i);
                 i--;
+
+                broadcastPlayerDisconnect(disconnectedId);
             }
         }
 

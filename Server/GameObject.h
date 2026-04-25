@@ -1,8 +1,8 @@
 #pragma once
 class GameObject {
 private:
-	int health;
+	int id;
 public:
 	GameObject();
-	int getHealth();
+	int getID();
 };
