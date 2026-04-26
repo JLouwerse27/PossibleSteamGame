@@ -18,12 +18,12 @@ int main() {
     jRenderWorld.store(jWorldB);
 
     JNetworkClient net;
-    //std::string ip;
-    //std::cout << "Enter server IP: ";
-    //std::cin >> ip;
-    //net.connectToServer(ip, 5000);
+    std::string ip;
+    std::cout << "Enter server IP: ";
+    std::cin >> ip;
+    net.connectToServer(ip, 5000);
 
-    net.connectToServer("10.37.15.150", 5000);
+    //net.connectToServer("10.37.15.150", 5000);
 
     //if (!net.isConnected()) {
     //    jgw::jGenerateWorld();
