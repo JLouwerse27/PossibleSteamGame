@@ -7,7 +7,7 @@
 
 namespace jgw {
     int islandHeight = 60;
-    int dirtHeight = jDirtLevel;
+    int dirtHeight = jDirtLevel;//100
     int stoneHeight = 130;
     int ironHeight = 180;
     int diamondHeight = 240;

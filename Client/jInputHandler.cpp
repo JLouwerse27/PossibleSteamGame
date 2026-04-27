@@ -3,11 +3,23 @@
 #include <iostream>
 #include "jVariables.h"
 
+
 JInputHandler::JInputHandler() {
 
 }
 
-void JInputHandler::runInput() {
+void JInputHandler::runInput(JGraphics& jc) {
+
+	/*while (const std::optional event = jc.getWindow().pollEvent()) {
+
+		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
+			WINDOW_WIDTH = resized->size.x;
+			WINDOW_HEIGHT = resized->size.y;
+			jXBlocksInCameraView = WINDOW_WIDTH / jBlockSize;
+			jYBlocksInCameraView = WINDOW_HEIGHT / jBlockSize;
+		}
+	}*/
+
 	jNextTurn = false;
 	for (int i = 0; i < sizeof(jIsKeyPressed) / sizeof(bool); i++) {
 		jIsKeyPressed[i] = false;

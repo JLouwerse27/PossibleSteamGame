@@ -80,8 +80,9 @@ void JNetworkClient::receiveUpdates() {
             else if (command == "PLAYER_UPDATE") {
                 int id, x, y, health;
                 packet >> id >> x >> y >> health;
-
-                updateRemotePlayer(id, x, y, health);
+                if (id != myId) {
+                    updateRemotePlayer(id, x, y, health);
+                }
             }
             else if (command == "YOUR_ID") {
                 packet >> myId;

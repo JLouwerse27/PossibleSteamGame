@@ -2,17 +2,21 @@
 #include <thread>
 #include <chrono>
 
-void JGameLogic::startGameLogic(JPlayer * jpl) {
-    uint64_t tick = 0;
+void JGameLogic::runGameLogic(JPlayer * jpl) {
     uint32_t height = 1;//measured in blocks, not pixels
     bool atEdge[4] = { false,false,false,false };
     //while (jRunning) {
         
-    if (jIsKeyPressed[0] && jY > 0) {
-        jY--;
+    if (jIsKeyPressed[0] && jY > 0){
+        if (jWorldA[(jpl->y + 1) * WORLD_WIDTH + jpl->x] == 1) {
+            jY--;
+            inAir = true;
+            tickJumpStarted = tick;
+        }
+        
     }
     if (jIsKeyPressed[2] && jY < WORLD_HEIGHT - jYBlocksInCameraView) {
-        jY++;
+        //jY++;
     }
     if (jIsKeyPressed[1] && jX > 0) {
         jX--;
@@ -20,6 +24,21 @@ void JGameLogic::startGameLogic(JPlayer * jpl) {
     if (jIsKeyPressed[3] && jX < WORLD_WIDTH - jXBlocksInCameraView) {
         jX++;
     }
+
+    //jumping
+    
+
+    if (inAir) {
+        if (tickJumpStarted + timeInAir <= tick && jWorldA[(jpl->y + 1) * WORLD_WIDTH + jpl->x] != 1) {
+            jY++;//fall
+        }else if (tickJumpStarted + timeInAir > tick){// && inAir) {
+            jY--;// incline
+        }
+        if (jWorldA[(jpl->y + 1) * WORLD_WIDTH + jpl->x] == 1 && tickJumpStarted + timeInAir <= tick) {
+            inAir = false;
+        }
+    }
+
 
         /*if (jIsKeyPressed[0] && jpl->y > 0) {
             if (jY > 0 + jYBlocksInCameraView) {
@@ -95,7 +114,7 @@ void JGameLogic::startGameLogic(JPlayer * jpl) {
         applyGravity();
         //if (!atEdge[0] && !atEdge[1] && !atEdge[2] && !atEdge[3]) {
             jpl->x = ((jX + jXBlocksInCameraView / 2));
-            jpl->y = ((jY - height + jYBlocksInCameraView / 2));
+            jpl->y = ((jY + jYBlocksInCameraView / 2 - 1));
         //}
 
         tick++;

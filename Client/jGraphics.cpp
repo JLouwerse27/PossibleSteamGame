@@ -47,6 +47,12 @@ void JGraphics::doGraphics() {
             else if (block == 1) {
                 blockColour = sf::Color(80, 30, 20);
             }
+            else if (block == 2) {
+                //blockColour = sf::Color::White;
+            }
+            else if (block == 3) {
+                blockColour = sf::Color(60, 30, 20);
+            }
             else if (block == 4) {
                 blockColour = sf::Color::White;
             }
@@ -81,8 +87,8 @@ void JGraphics::drawOtherPlayers(uint32_t camX, uint32_t camY) {
         // draw 
         if (p.x >= camX && p.x <= camX + jXBlocksInCameraView) {
             if (p.y >= camY && p.y <= camY + jYBlocksInCameraView) {
-                jRect.setFillColor(sf::Color(180, 90, 50));
-                jRect.setPosition(sf::Vector2f(p.x * jBlockSize, p.y * jBlockSize));
+                jRect.setFillColor(sf::Color(30, 30, 200));
+                jRect.setPosition(sf::Vector2f((p.x-jX) * jBlockSize, (p.y-jY) * jBlockSize));
                 rw.draw(jRect);
             }
         }
@@ -92,4 +98,8 @@ void JGraphics::drawOtherPlayers(uint32_t camX, uint32_t camY) {
 
 bool JGraphics::isOpen() const {
     return rw.isOpen();
+}
+
+sf::RenderWindow& JGraphics::getWindow() {
+    return rw;
 }

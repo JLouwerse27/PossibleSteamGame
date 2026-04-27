@@ -5,7 +5,7 @@ std::atomic<bool> jRunning = true;
 
 int jDirtLevel = 100;
 
-int jBlockSize = 20;
+int jBlockSize = 15;
 int jXBlocksInCameraView = WINDOW_WIDTH / jBlockSize;
 int jYBlocksInCameraView = WINDOW_HEIGHT / jBlockSize;
 
@@ -14,6 +14,9 @@ std::atomic<uint32_t> jY = jDirtLevel - jYBlocksInCameraView/2;
 
 bool jIsKeyPressed[32] = {};
 bool jIsMousePressed[5] = {};
+
+int WINDOW_WIDTH = 600;
+int WINDOW_HEIGHT = 450;
 
 unsigned char jWorldA[WORLD_SIZE] = {};
 unsigned char jWorldB[WORLD_SIZE] = {};

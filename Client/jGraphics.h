@@ -15,4 +15,5 @@ public:
 	void init(std::string title);
 	void doGraphics();
 	bool isOpen() const;
+	sf::RenderWindow& getWindow();
 };

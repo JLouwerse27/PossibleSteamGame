@@ -25,10 +25,10 @@ int main() {
 
     //net.connectToServer("10.37.15.150", 5000);
 
-    //if (!net.isConnected()) {
-    //    jgw::jGenerateWorld();
-    //    std::memcpy(jWorldB, jWorldA, WORLD_SIZE);
-    //}
+    if (!net.isConnected()) {
+        jgw::jGenerateWorld();
+        std::memcpy(jWorldB, jWorldA, WORLD_SIZE);
+    }
 
     JPlayer * jpl = new JPlayer;
     jpl->x = WORLD_WIDTH / 2;
@@ -48,8 +48,8 @@ int main() {
     //std::thread glt(&JGameLogic::startGameLogic, &jgl, jpl);
 
     while (jg.isOpen()) {
-        ji.runInput();
-        jgl.startGameLogic(jpl);
+        ji.runInput(jg);
+        jgl.runGameLogic(jpl);
         net.sendMovePlayer(jpl->x, jpl->y);
         net.receiveUpdates();
         jg.doGraphics();

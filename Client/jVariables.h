@@ -19,8 +19,8 @@ extern std::atomic<uint32_t> jY;
 
 extern bool jIsKeyPressed[32];
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
 
 const int WORLD_WIDTH = 400;
 const int WORLD_HEIGHT = 300;
