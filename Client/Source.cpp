@@ -49,22 +49,25 @@ int main() {
 
     sf::Clock clock;
     float accumulator = 0.0f;
-    const float dt = 1.0f / 60.0f;
+    const float dt = 1.0f / 120.0f;
 
     while (jg.isOpen()) {
         float frameTime = clock.restart().asSeconds();
         accumulator += frameTime;
 
+        
+
         while (accumulator >= dt) {
+            ji.runInput(jg);
             jgl.runGameLogic(jpl);
             accumulator -= dt;
         }
 
-        ji.runInput(jg);
-        net.receiveUpdates();
-        net.sendMovePlayer(jpl->x, jpl->y);
-
         jg.doGraphics();
+        net.sendMovePlayer(jpl->x, jpl->y);
+        net.receiveUpdates();
+
+        
     }
 
 

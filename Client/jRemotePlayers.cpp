@@ -1,5 +1,5 @@
 #include "jRemotePlayers.h"
-
+#include <iostream>
 #include <algorithm>
 
 std::vector<RemotePlayer> remotePlayers;
@@ -10,6 +10,7 @@ void updateRemotePlayer(int id, uint32_t x, uint32_t y, uint32_t health) {
             p.x = x;
             p.y = y;
             p.health = health;
+            std::cout << "received other player: " << p.x << ", " << p.y << "\n";
             return;
         }
     }
