@@ -47,14 +47,35 @@ int main() {
 
     //std::thread glt(&JGameLogic::startGameLogic, &jgl, jpl);
 
+    sf::Clock clock;
+    float accumulator = 0.0f;
+    const float dt = 1.0f / 60.0f;
+
     while (jg.isOpen()) {
+        float frameTime = clock.restart().asSeconds();
+        accumulator += frameTime;
+
+        while (accumulator >= dt) {
+            jgl.runGameLogic(jpl);
+            accumulator -= dt;
+        }
+
+        ji.runInput(jg);
+        net.receiveUpdates();
+        net.sendMovePlayer(jpl->x, jpl->y);
+
+        jg.doGraphics();
+    }
+
+
+    /*while (jg.isOpen()) {
         ji.runInput(jg);
         jgl.runGameLogic(jpl);
         net.sendMovePlayer(jpl->x, jpl->y);
         net.receiveUpdates();
         jg.doGraphics();
         std::this_thread::sleep_for(std::chrono::milliseconds(4));
-    }
+    }*/
 
     jRunning = false;
     //glt.join();
