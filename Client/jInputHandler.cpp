@@ -10,15 +10,32 @@ JInputHandler::JInputHandler() {
 
 void JInputHandler::runInput(JGraphics& jc) {
 
-	/*while (const std::optional event = jc.getWindow().pollEvent()) {
+	for (int i = 0; i < sizeof(jIsMousePressed) / sizeof(bool); i++) {
+		jIsMousePressed[i] = false;
+	}
 
-		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
-			WINDOW_WIDTH = resized->size.x;
-			WINDOW_HEIGHT = resized->size.y;
-			jXBlocksInCameraView = WINDOW_WIDTH / jBlockSize;
-			jYBlocksInCameraView = WINDOW_HEIGHT / jBlockSize;
-		}
-	}*/
+	if (sf::Mouse::getPosition(jc.getWindow()).x >= 0 && sf::Mouse::getPosition(jc.getWindow()).x < WINDOW_WIDTH) {
+		mouseX = sf::Mouse::getPosition(jc.getWindow()).x;
+	}
+	if (sf::Mouse::getPosition(jc.getWindow()).y >= 0 && sf::Mouse::getPosition(jc.getWindow()).y < WINDOW_HEIGHT) {
+		mouseY = sf::Mouse::getPosition(jc.getWindow()).y;
+	}
+
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+		jIsMousePressed[0] = true;
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+		jIsMousePressed[1] = true;
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle)) {
+		jIsMousePressed[2] = true;
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Extra1)) {
+		jIsMousePressed[3] = true;
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Extra2)) {
+		jIsMousePressed[4] = true;
+	}
 
 	jNextTurn = false;
 	for (int i = 0; i < sizeof(jIsKeyPressed) / sizeof(bool); i++) {
