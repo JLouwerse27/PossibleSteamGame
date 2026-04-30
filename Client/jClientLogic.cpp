@@ -63,36 +63,46 @@ void JGameLogic::runGameLogic(JPlayer* jpl) {
 
 
         if (jIsKeyPressed[0] && jY > 0) {
+            bool canGoUp = true;
             if (jpl->x % jBlockWidth != 0) {
                 if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1) {
                     if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
                         if (!goingThisDirection[0]) {
-                            //if (tickJumpStarted + timeInAir * 3 <= tick) {
-                                //jpl->y -= jBlockHeight;
-                                goingThisDirection[0] = true;
-                                inAir = true;
-                                tickJumpStarted = tick;
-                            //}
+                            canGoUp = true;
                         }
                     }
-                }
+                    else {
+                        canGoUp = false;
+                        goingThisDirection[0] = false;
+						tickJumpStarted = -3000;
+                    }
+                }//if there isn't a block below and one right of the player and he/she presses W, then don't do anything
+                //because there might be a block directly below the player to jump from
             }
             
-            if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1) {
+            if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1 && canGoUp) {
                 if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
                     if (!goingThisDirection[0]) {
-                        std::cout << "not goin up\n";
-                        //if (tickJumpStarted + timeInAir * 3 <= tick) {
-                        std::cout << "jumping\n";
-                        //jpl->y -= jBlockHeight;
                         goingThisDirection[0] = true;
-                        inAir = true;
                         tickJumpStarted = tick;
-                        //}
                     }
                 }
+                else {
+					canGoUp = false;
+                    goingThisDirection[0] = false;
+                    tickJumpStarted = -3000;
+                }
+            }
+            else {
+                canGoUp = false;
             }
             
+            if (canGoUp) {
+                jpl->y -= yIncrement;
+                goingThisDirection[0] = true;
+                tickJumpStarted = tick;
+            }
+
         }
         if (jIsKeyPressed[2] && jY < WORLD_HEIGHT - jYBlocksInCameraView) {
             //jY++;
@@ -102,10 +112,7 @@ void JGameLogic::runGameLogic(JPlayer* jpl) {
             if (jpl->y % jBlockHeight != 0) {
                 if (jpl->x % jBlockWidth != 0) {
                     if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth - 1 + 1] != 1) {
-                        if ((jpl->x % jBlockWidth) - 0 >= (jBlockWidth / speedMod)) {
-                            //canGoLeft = true;
-                        }
-                        else {
+                        if ((jpl->x % jBlockWidth) < (jBlockWidth / speedMod)) {
                             canGoLeft = false;
                         }
                     }
@@ -124,7 +131,7 @@ void JGameLogic::runGameLogic(JPlayer* jpl) {
             }
             if (jpl->x % jBlockWidth != 0) {
                 if (jWorldA[(jpl->y / jBlockHeight) * WORLD_WIDTH + jpl->x / jBlockWidth - 1 + 1] != 1) {
-                    if ((jpl->x % jBlockWidth) - 0 >= (jBlockWidth / speedMod)) {
+                    if ((jpl->x % jBlockWidth) >= (jBlockWidth / speedMod)) {
                         //canGoLeft = true;
                     }
                     else {
@@ -152,34 +159,40 @@ void JGameLogic::runGameLogic(JPlayer* jpl) {
         if (jIsKeyPressed[3] && jX < WORLD_WIDTH - jXBlocksInCameraView) {
             bool canGoRight = true;
             if (jpl->y % jBlockHeight != 0) {
-                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                    if (jpl->x % jBlockWidth != 0) {
-                        if (jBlockWidth - (jpl->x % jBlockWidth) >= (jBlockWidth / speedMod)) {
-                            canGoRight = true;
-                        }
-                        else {
+                if (jpl->x % jBlockWidth != 0) {
+                    if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
+                        if (jBlockWidth - (jpl->x % jBlockWidth) < (jBlockWidth / speedMod)) {
                             canGoRight = false;
                         }
-                    }
-                }
-                else {
-					canGoRight = false;
-                }
-            }
-            if (jWorldA[(jpl->y / jBlockHeight) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                //bool canGoRight = true;
-                if (jpl->x % jBlockWidth != 0) {
-                    if (jBlockWidth - (jpl->x % jBlockWidth) >= (jBlockWidth / speedMod)) {
-                        canGoRight = true;
                     }
                     else {
                         canGoRight = false;
                     }
                 }
-                    
+                else {
+                    if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1) {
+                        canGoRight = false;
+                    }
+                }
+            }
+            //do not put else here, we need to check for the block to the right of the player in both cases
+            if (jpl->x % jBlockWidth != 0) {
+                if (jWorldA[(jpl->y / jBlockHeight) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
+                    if (jBlockWidth - (jpl->x % jBlockWidth) < (jBlockWidth / speedMod)) {
+                        canGoRight = false;
+                    }
+                }
+                else {
+                    canGoRight = false;
+                }
             }
             else {
-                canGoRight = false;
+                if (jWorldA[(jpl->y / jBlockHeight) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
+                    //canGoRight = true;
+                }
+                else {
+                    canGoRight = false;
+                }
             }
             if (canGoRight) {
                 jpl->x += jBlockWidth / speedMod;
@@ -195,217 +208,108 @@ void JGameLogic::runGameLogic(JPlayer* jpl) {
             if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
                 inAir = true;
             }
+            else {
+				inAir = false;
+            }
 		}
         
         if (inAir) {
             if (tickJumpStarted + timeInAir <= tick) {
-                //check the block "directly" (could be slightly to the left) below the player
-                //if (!goingThisDirection[1] && !goingThisDirection[3]) {
-                    
-                        if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
-                            bool canGoDown = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                                    canGoDown = true;
-                                }
-                                else {
-                                    canGoDown = false;
-                                }
-                            }
-                            if (tick % 2 == 0 && canGoDown) {
-                                //jpl->y++;//fall
-                                isGoingDownNextTick = true;
-                                goingThisDirection[0] = false;
-                                goingThisDirection[2] = true;
-                            }
+                //check the block "directly" (could be slightly to the left) below the    
+                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
+                    bool canGoDown = true;
+                    if (jpl->x % jBlockWidth != 0) {
+                        if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
+                            canGoDown = true;
                         }
-                    
-                /* } else if (goingThisDirection[1]) {
-                    
-                    if (jpl->y % jBlockHeight != 0) {
-
-                    }
-                    else {
-                        if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
-                            bool canGoDown = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                                    canGoDown = true;
-                                }
-                                else {
-                                    canGoDown = false;
-                                }
-                            }
-                            if (tick % (24 / jBlockHeight) == 0 && canGoDown) {
-                                //jpl->y++;
-                                isGoingDownNextTick = true;
-                                goingThisDirection[0] = false;
-                                goingThisDirection[2] = true;
-                            }
+                        else {
+                            canGoDown = false;
                         }
                     }
-                }
-                else if (goingThisDirection[3]) {
-                    
-                    
-                        if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
-                            bool canGoDown = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                                    canGoDown = true;
-                                }
-                                else {
-                                    canGoDown = false;
-                                }
-                            }
-                            if (tick % (24 / jBlockHeight) == 0 && canGoDown) {
-                                //jpl->y++;
-                                isGoingDownNextTick = true;
-                                goingThisDirection[0] = false;
-                                goingThisDirection[2] = true;
-                            }
-                        }
-                    
-                }*/
+                    if (tick % 2 == 0 && canGoDown) {
+                        isGoingDownNextTick = true;
+                        goingThisDirection[0] = false;
+                        goingThisDirection[2] = true;
+                    }
+                } 
             }
             else if (tickJumpStarted + timeInAir > tick) {
-                if (!goingThisDirection[1] && !goingThisDirection[3]) {
-                    if (jpl->y % jBlockHeight != 0) {
+                if (jpl->y % jBlockHeight != 0) {
+                    bool canGoUp = true;
+                    if (jpl->x % jBlockWidth != 0) {
+                        //check the block above and to the right of the player if the player isn't perfectly aligned with x axis
+                        if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1) {
+                            if (jpl->y % jBlockHeight < yIncrement) {
+								yIncrement = jpl->y % jBlockHeight;
+                            }
+                        }
+                    }
+                    //check the block directly above the player regardless
+                    if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1) {
+                        if (jpl->y % jBlockHeight < yIncrement) {
+                            yIncrement = jpl->y % jBlockHeight;
+                        }
+                    }
+
+                    if (canGoUp) {
                         if (tick % 3 == 0) {
-                            //jpl->y--;
                             isGoingUpNextTick = true;
                             goingThisDirection[0] = true;
                             goingThisDirection[2] = false;
                         }
                     }
                     else {
-                        if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
-                            bool canGoUp = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                                    canGoUp = true;
-                                }
-                                else {
-                                    canGoUp = false;
-                                }
-                            }
-                            if (tick % 3 == 0 && canGoUp) {
-                                //jpl->y--;
-                                isGoingUpNextTick = true;
-                                goingThisDirection[0] = true;
-                                goingThisDirection[2] = false;
-                            }
-                        }
-                        else {
-                            goingThisDirection[0] = false;
-                            tickJumpStarted = -3000;
-                        }
+                        isGoingUpNextTick = false;
+                        goingThisDirection[0] = false;
                     }
                 }
-                else if (goingThisDirection[1]) {
-                    if (jpl->y % jBlockHeight != 0) {
+                else {
+                    bool canGoUp = true;
+                    if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth] != 1) {
+                        if (jpl->x % jBlockWidth != 0) {
+                            if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1) {
+                                canGoUp = false;
+                            }
+                        }
+                        if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1) {
+                            canGoUp = false;
+                        }
+                            
+                    }
+                    else {
+                        canGoUp = false;
+                    }
+                    if (canGoUp) {
                         if (tick % 3 == 0) {
-                            //jpl->y--;
                             isGoingUpNextTick = true;
                             goingThisDirection[0] = true;
                             goingThisDirection[2] = false;
                         }
                     }
                     else {
-                        if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth - 1] != 1) {
-                            bool canGoUp = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth - 1 + 1] != 1) {
-                                    canGoUp = true;
-                                }
-                                else {
-                                    canGoUp = false;
-                                }
-                            }
-                            if (tick % 2 == 0 && canGoUp) {
-                                //jpl->y--;
-                                isGoingUpNextTick = true;
-                                goingThisDirection[0] = true;
-                                goingThisDirection[2] = false;
-                            }
-                        }
-                        else {
-                            goingThisDirection[0] = false;
-                            tickJumpStarted = -3000;
-                        }
-                    }
-                }
-                else if (goingThisDirection[3]) {
-                    if (jpl->y % jBlockHeight != 0) {
-                        if (tick % 3 == 0) {
-                            //jpl->y--;
-                            isGoingUpNextTick = true;
-                            goingThisDirection[0] = true;
-                            goingThisDirection[2] = false;
-                        }
-                    }
-                    else {
-                        if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] != 1) {
-                            bool canGoUp = true;
-                            if (jpl->x % jBlockWidth != 0) {
-                                if (jWorldA[(jpl->y / jBlockHeight - 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1 + 1] != 1) {
-                                    canGoUp = true;
-                                }
-                                else {
-                                    canGoUp = false;
-                                }
-                            }
-                            if (tick % 3 == 0 && canGoUp) {
-                                //jpl->y--;
-                                isGoingUpNextTick = true;
-                                goingThisDirection[0] = true;
-                                goingThisDirection[2] = false;
-                            }
-                        }
-                        else {
-                            goingThisDirection[0] = false;
-                            tickJumpStarted = -3000;
-                        }
+                        isGoingUpNextTick = false;
+                        goingThisDirection[0] = false;
                     }
                 }
             }
 
-
-            if (jpl->x % jBlockWidth != 0) {
-                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1 && tickJumpStarted + timeInAir <= tick) {
-                    inAir = false;
-                    goingThisDirection[2] = false;
-                    yIncrement = 1;
-                }
-                if(jpl->y % jBlockHeight != 0) {
-                    if (jWorldA[(jpl->y / jBlockHeight + 1 + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1 && tickJumpStarted + timeInAir <= tick) {
+            if (jpl->y % jBlockHeight == 0) {
+                if (jpl->x % jBlockWidth != 0) {
+                    if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth + 1] == 1 && tickJumpStarted + timeInAir <= tick) {
                         inAir = false;
                         goingThisDirection[2] = false;
                         yIncrement = 1;
                     }
-				}
-            }
-
-            if (jpl->y % jBlockHeight != 0) {
-                if (jWorldA[(jpl->y / jBlockHeight + 1 + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1 && tickJumpStarted + timeInAir <= tick) {
+                }
+                if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1 && tickJumpStarted + timeInAir <= tick) {
                     inAir = false;
                     goingThisDirection[2] = false;
-					yIncrement = 1;
+                    yIncrement = 1;
                 }
-            }
-
-            if (jWorldA[(jpl->y / jBlockHeight + 1) * WORLD_WIDTH + jpl->x / jBlockWidth] == 1 && tickJumpStarted + timeInAir <= tick) {
-                inAir = false;
-				goingThisDirection[2] = false;
-                yIncrement = 1;
             }
         }
 
-        //jumping
-
-
-        
-
+        //edges
         /*if (jIsKeyPressed[0] && jpl->y > 0) {
             if (jY > 0 + jYBlocksInCameraView) {
                 jY--;
